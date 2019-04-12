@@ -183,7 +183,7 @@ class Bridge:
         data = {'lights':lights,
                 'name':group_id,
                 'type':group_id
-                }
+               }
         resp = self._post(self._username_url+'/groups', data)
         return resp
 
