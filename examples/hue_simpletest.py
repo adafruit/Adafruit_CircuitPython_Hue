@@ -60,4 +60,4 @@ for color in hsl_colors:
 # my_bridge.set_group(1, scene='AB34EF5')
 
 # Turn off the light
-my_bridge.set_light(1,on=False)
+my_bridge.set_light(1, on=False)
