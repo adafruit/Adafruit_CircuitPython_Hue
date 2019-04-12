@@ -57,7 +57,7 @@ for color in hsl_colors:
     time.sleep(5)
 
 # Set a predefinedscene
-#my_bridge.set_group(1, scene='AB34EF5')
+# my_bridge.set_group(1, scene='AB34EF5')
 
 # Turn off the light
 resp = my_bridge.set_light(1,on=False)
