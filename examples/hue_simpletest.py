@@ -40,10 +40,10 @@ except:
     raise
 
 # Enumerate all lights on the bridge
-lights = my_bridge.get_lights()
+my_bridge.get_lights()
 
 # Turn on the light
-resp = my_bridge.set_light(1, on=True)
+my_bridge.set_light(1, on=True)
 
 # RGB colors to Hue-Compatible HSL colors
 hsl_y = my_bridge.rgb_to_hsb([255, 255, 0])
@@ -60,4 +60,4 @@ for color in hsl_colors:
 # my_bridge.set_group(1, scene='AB34EF5')
 
 # Turn off the light
-resp = my_bridge.set_light(1,on=False)
+my_bridge.set_light(1,on=False)
