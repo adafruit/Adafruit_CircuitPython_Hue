@@ -164,6 +164,15 @@ class Bridge:
         resp = self._put('{0}/lights/{1}/state'.format(self._username_url, light_id), kwargs)
         return resp
 
+    def toggle_light(self, light_id):
+        """Gets and toggles the current state of a specified light.
+        :param int light_id: Light identifier.
+        """
+        light_state = self.get_light(light_id)
+        light_state = not light_state['state']['on']
+        resp = self.set_light(light_id, on=light_state)
+        return resp
+
     def get_light(self, light_id):
         """Gets the attributes and state of a provided light.
         :param int light_id: Light identifier.
