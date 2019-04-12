@@ -67,24 +67,22 @@ class Bridge:
             self._username_url = self._bridge_url+'/'+ self._username
 
     @staticmethod
-    def rgb_to_hsb(red, green, blue):
+    def rgb_to_hsb(rgb):
         """Returns RGB values as a HSL tuple.
-        :param int red: Red value
-        :param int green: Green value
-        :param int blue: Blue value
+        :param list rgb: RGB Values
         """
-        r = red/255
-        g = green/255
-        b = blue/255
+        r = rgb[0]/255
+        g = rgb[1]/255
+        b = rgb[2]/255
         c_max = max(r, g, b)
         c_min = min(r, g, b)
         delta = c_max-c_min
-        lightness = ((c_max+c_min)/2)
+        light = ((c_max+c_min)/2)
         if delta == 0.0:
             hue = 0
             sat = 0
         else:
-            if lightness < 0.5:
+            if light < 0.5:
                 sat = (c_max-c_min)/(c_max+c_min)
             else:
                 sat = (c_max-c_min)/(2.0-c_max-c_min)
@@ -99,8 +97,8 @@ class Bridge:
                 hue += 360
         hue = map_range(hue, 0, 360, 0, 65535)
         sat = map_range(sat*100, 0, 100, 0, 254)
-        lightness = map_range(lightness*100, 0, 100, 0, 254)
-        return round(hue), round(sat, 3), round(lightness, 2)
+        light = map_range(light*100, 0, 100, 0, 254)
+        return round(hue), round(sat, 3), round(light, 2)
 
     # Hue Core API
     def discover_bridge(self):
