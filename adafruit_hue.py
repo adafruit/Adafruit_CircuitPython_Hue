@@ -41,6 +41,7 @@ Implementation Notes
 """
 import time
 from random import randint
+from simpleio import map_range
 
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_Hue.git"
@@ -65,7 +66,7 @@ class Bridge:
 
     @staticmethod
     def rgb_to_hsb(red, green, blue):
-        """Converts RGB values to a HSL tuple.
+        """Returns RGB values as a HSL tuple.
         :param int red: Red value
         :param int green: Green value
         :param int blue: Blue value
@@ -94,6 +95,9 @@ class Bridge:
             h*=60
             if h < 0:
                 h+=360
+        h = map_range(h, 0, 360, 0, 65535)
+        s = map_range(s*100, 0, 100, 0, 254)
+        l = map_range(l*100, 0, 100, 0, 254)
         return round(h), round(s, 3), round(l, 2)
 
     # Hue Core API
@@ -147,9 +151,9 @@ class Bridge:
         """Allows the user to turn the light on and off, modify the hue and effects.
         You can pass the following as valid kwargs into this method:
         :param bool on: On/Off state of the light
-        :param int bri: Brightness value of the light (1 to 254)
-        :param int hue: Hue value to set the light to (0 to 65535)
-        :param int sat: Saturation of the light (0 to 254)
+        :param int bri: Brightness value of the light, 0-100% (1 to 254)
+        :param int hue: Hue value to set the light, in degrees (0 to 360) (0 to 65535)
+        :param int sat: Saturation of the light, 0-100% (0 to 254)
         (more settings at:
         https://developers.meethue.com/develop/
         hue-api/lights-api/#set-light-state)
