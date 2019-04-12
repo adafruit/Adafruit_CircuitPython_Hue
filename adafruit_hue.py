@@ -60,9 +60,11 @@ class Bridge:
             self._wifi = wifi_manager
         else:
             raise TypeError("This library requires a WiFiManager object.")
+        self._ip = bridge_ip
+        self._username = username
         if bridge_ip and username is not None:
-            self._bridge_url = 'http://{}/api'.format(bridge_ip)
-            self._username_url = self._bridge_url+'/'+ username
+            self._bridge_url = 'http://{}/api'.format(self._ip)
+            self._username_url = self._bridge_url+'/'+ self._username
 
     @staticmethod
     def rgb_to_hsb(red, green, blue):
@@ -76,29 +78,29 @@ class Bridge:
         b = blue/255
         c_max = max(r, g, b)
         c_min = min(r, g, b)
-        d = c_max-c_min
-        l = ((c_max+c_min)/2)
-        if d == 0.0:
-            h = 0
-            s = 0
+        delta = c_max-c_min
+        lightness = ((c_max+c_min)/2)
+        if delta == 0.0:
+            hue = 0
+            sat = 0
         else:
-            if l < 0.5:
-                s = (c_max-c_min)/(c_max+c_min)
+            if lightness < 0.5:
+                sat = (c_max-c_min)/(c_max+c_min)
             else:
-                s = (c_max-c_min)/(2.0-c_max-c_min)
+                sat = (c_max-c_min)/(2.0-c_max-c_min)
             if c_max == r:
-                h = (g-b)/(c_max-c_min)
+                hue = (g-b)/(c_max-c_min)
             elif c_max == g:
-                h = 2.0 + (b-r)/(c_max-c_min)
+                hue = 2.0 + (b-r)/(c_max-c_min)
             else:
-                h = 4.0 + (r-g)/(c_max-c_min)
-            h*=60
-            if h < 0:
-                h+=360
-        h = map_range(h, 0, 360, 0, 65535)
-        s = map_range(s*100, 0, 100, 0, 254)
-        l = map_range(l*100, 0, 100, 0, 254)
-        return round(h), round(s, 3), round(l, 2)
+                hue = 4.0 + (r-g)/(c_max-c_min)
+            hue *= 60
+            if hue < 0:
+                hue += 360
+        hue = map_range(hue, 0, 360, 0, 65535)
+        sat = map_range(sat*100, 0, 100, 0, 254)
+        lightness = map_range(lightness*100, 0, 100, 0, 254)
+        return round(hue), round(sat, 3), round(lightness, 2)
 
     # Hue Core API
     def discover_bridge(self):
