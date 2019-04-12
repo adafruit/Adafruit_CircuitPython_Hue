@@ -63,6 +63,33 @@ class Bridge:
             self._bridge_url = 'http://{}/api'.format(bridge_ip)
             self._username_url = self._bridge_url+'/'+ username
 
+
+    @staticmethod
+    def rgb_to_hsb(red, green, blue):
+        """Converts RGB values to HSL for use with set_light/set_group.
+        :param int red: Red value
+        :param int green: Green value
+        :param int blue: Blue value
+        """
+        r = red/255
+        g = green/255
+        b = blue/255
+        c_max = max(r, g, b)
+        c_min = min(r, g, b)
+        d = c_max-c_min
+        l = ((c_max+c_min)/2)
+        if d == 0.0:
+            h = 0
+            s = 0
+        else:
+            if l < 0.5:
+                s = (c_max-c_min)/(c_max+c_min)
+            else:
+                s = (c_max-c_min)/(2.0-c_max-c_min)
+
+        #hsl = (round(h), round(s), round(l))
+        return s, l
+
     # Hue Core API
     def discover_bridge(self):
         """Discovers Philips Hue Bridge IP from the hosted broker discovery service.
