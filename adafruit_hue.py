@@ -38,6 +38,9 @@ Implementation Notes
 * Adafruit ESP32SPI or ESP_ATcontrol library:
     https://github.com/adafruit/Adafruit_CircuitPython_ESP32SPI
     https://github.com/adafruit/Adafruit_CircuitPython_ESP_ATcontrol
+
+* SimpleIO library:
+    https://github.com/adafruit/Adafruit_CircuitPython_SimpleIO
 """
 import time
 from random import randint
