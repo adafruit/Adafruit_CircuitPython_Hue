@@ -52,7 +52,50 @@ To install in a virtual environment in your current project:
 Usage Example
 =============
 
-.. todo:: Add a quick, simple example. It and other examples should live in the examples folder and be included in docs/examples.rst.
+Load bridge username and IP Address from secrets.py file:
+
+.. code-block:: python
+
+    username = secrets['hue_username']
+    bridge_ip = secrets['bridge_ip']
+    my_bridge = Bridge(wifi, bridge_ip, username)
+
+Enumerate all lights on the bridge
+
+.. code-block:: python
+
+    lights = my_bridge.get_lights()
+
+Turn on a light
+
+.. code-block:: python
+
+    my_bridge.set_light(1, on=True)
+
+Turn off a light
+
+.. code-block:: python
+
+    my_bridge.set_light(1, on=False)
+
+Set a light to the color yellow (RGB)
+
+.. code-block:: python
+
+        color = my_bridge.rgb_to_hsb([255, 255, 0])
+        my_bridge.set_light(1, hue=int(color[0]), sat=int(color[1]), bri=int(color[2]))
+
+Set a group of lights to a predefined scene
+
+.. code-block:: python
+
+        my_bridge.set_group(1, scene='AB34EF5')
+
+Set a group of lights to a predefined color
+
+.. code-block:: python
+
+        my_bridge.set_group(1, color)
 
 Contributing
 ============

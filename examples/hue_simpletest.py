@@ -43,7 +43,7 @@ except:
 lights = my_bridge.get_lights()
 
 # Turn on the light
-resp = my_bridge.set_light(3, on=True)
+resp = my_bridge.set_light(1, on=True)
 
 # RGB colors to Hue-Compatible HSL colors
 hsl_y = my_bridge.rgb_to_hsb([255, 255, 0])
@@ -53,11 +53,11 @@ hsl_colors = [hsl_y, hsl_b, hsl_w]
 
 # Set the light to Python colors!
 for color in hsl_colors:
-    my_bridge.set_light(3, hue=int(color[0]), sat=int(color[1]), bri=int(color[2]))
+    my_bridge.set_light(1, hue=int(color[0]), sat=int(color[1]), bri=int(color[2]))
     time.sleep(5)
 
 # Set a predefinedscene
 #my_bridge.set_group(1, scene='AB34EF5')
 
 # Turn off the light
-resp = my_bridge.set_light(3,on=False)
+resp = my_bridge.set_light(1,on=False)
