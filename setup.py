@@ -35,7 +35,8 @@ setup(
 
     install_requires=[
         'Adafruit-Blinka',
-        'ESP32SPI'
+        'adafruit-circuitpython-esp32spi',
+        'adafruit-circuitpython-simpleio'
     ],
 
     # Choose your license
