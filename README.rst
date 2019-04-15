@@ -20,7 +20,7 @@ Dependencies
 This driver depends on:
 
 * `Adafruit CircuitPython <https://github.com/adafruit/circuitpython>`_
-* `Adafruit CircuitPython SimpleIO <hhttps://github.com/adafruit/Adafruit_CircuitPython_SimpleIO/>`_
+* `Adafruit CircuitPython SimpleIO <https://github.com/adafruit/Adafruit_CircuitPython_SimpleIO>`_
 
 You'll also need a library to communicate with an ESP32 as a coprocessor using a WiFiManager object. This library supports connecting an ESP32 using either SPI or UART.
 
