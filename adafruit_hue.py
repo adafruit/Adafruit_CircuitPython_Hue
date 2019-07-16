@@ -158,8 +158,7 @@ class Bridge:
         :param int hue: Hue value to set the light, in degrees (0 to 360) (0 to 65535)
         :param int sat: Saturation of the light, 0-100% (0 to 254)
         (more settings at:
-        https://developers.meethue.com/develop/
-        hue-api/lights-api/#set-light-state)
+        https://developers.meethue.com/develop/hue-api/lights-api/#set-light-state )
         """
         resp = self._put('{0}/lights/{1}/state'.format(self._username_url, light_id), kwargs)
         return resp
