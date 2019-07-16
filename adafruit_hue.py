@@ -207,7 +207,7 @@ class Bridge:
         :param int bri: Brightness value of the light (1 to 254)
         :param int hue: Hue value to set the light to (0 to 65535)
         :param int sat: Saturation of the light (0 to 254)
-        (more settings at 
+        (more settings at
         https://developers.meethue.com/develop/hue-api/lights-api/#set-light-state )
         """
         resp = self._put('{0}/groups/{1}/action'.format(self._username_url, group_id), kwargs)
