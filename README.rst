@@ -10,7 +10,7 @@ Introduction
     :alt: Discord
 
 .. image:: https://github.com/adafruit/Adafruit_CircuitPython_Hue/workflows/Build%CI/badge.svg
-    :target: https://github.com/adafruit/Adafruit_CircuitPython_Hue
+    :target: https://github.com/adafruit/Adafruit_CircuitPython_Hue/actions/
     :alt: Build Status
 
 CircuitPython helper library for Philips Hue Lights.
