@@ -5,6 +5,7 @@ from digitalio import DigitalInOut
 from adafruit_esp32spi import adafruit_esp32spi
 from adafruit_esp32spi import adafruit_esp32spi_wifimanager
 import neopixel
+
 # Import Philips Hue Bridge
 from adafruit_hue import Bridge
 
@@ -26,17 +27,21 @@ wifi = adafruit_esp32spi_wifimanager.ESPSPI_WiFiManager(esp, secrets, status_lig
 
 # Attempt to load bridge username and IP address from secrets.py
 try:
-    username = secrets['hue_username']
-    bridge_ip = secrets['bridge_ip']
+    username = secrets["hue_username"]
+    bridge_ip = secrets["bridge_ip"]
     my_bridge = Bridge(wifi, bridge_ip, username)
 except:
     # Perform first-time bridge setup
     my_bridge = Bridge(wifi)
     ip = my_bridge.discover_bridge()
     username = my_bridge.register_username()
-    print('ADD THESE VALUES TO SECRETS.PY: \
+    print(
+        'ADD THESE VALUES TO SECRETS.PY: \
                             \n\t"bridge_ip":"{0}", \
-                            \n\t"hue_username":"{1}"'.format(ip, username))
+                            \n\t"hue_username":"{1}"'.format(
+            ip, username
+        )
+    )
     raise
 
 # Enumerate all lights on the bridge

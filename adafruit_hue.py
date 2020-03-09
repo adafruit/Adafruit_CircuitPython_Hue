@@ -49,58 +49,60 @@ from simpleio import map_range
 __version__ = "0.0.0-auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_Hue.git"
 
+
 class Bridge:
     """
     HTTP Interface for interacting with a Philips Hue Bridge.
     """
+
     def __init__(self, wifi_manager, bridge_ip=None, username=None):
         """
         Creates an instance of the Philips Hue Bridge Interface.
         :param wifi_manager wifi_manager: WiFiManager from ESPSPI_WiFiManager/ESPAT_WiFiManager
         """
         wifi_type = str(type(wifi_manager))
-        if ('ESPSPI_WiFiManager' in wifi_type or 'ESPAT_WiFiManager' in wifi_type):
+        if "ESPSPI_WiFiManager" in wifi_type or "ESPAT_WiFiManager" in wifi_type:
             self._wifi = wifi_manager
         else:
             raise TypeError("This library requires a WiFiManager object.")
         self._ip = bridge_ip
         self._username = username
         if bridge_ip and username is not None:
-            self._bridge_url = 'http://{}/api'.format(self._ip)
-            self._username_url = self._bridge_url+'/'+ self._username
+            self._bridge_url = "http://{}/api".format(self._ip)
+            self._username_url = self._bridge_url + "/" + self._username
 
     @staticmethod
     def rgb_to_hsb(rgb):
         """Returns RGB values as a HSL tuple.
         :param list rgb: RGB Values
         """
-        r = rgb[0]/255
-        g = rgb[1]/255
-        b = rgb[2]/255
+        r = rgb[0] / 255
+        g = rgb[1] / 255
+        b = rgb[2] / 255
         c_max = max(r, g, b)
         c_min = min(r, g, b)
-        delta = c_max-c_min
-        light = ((c_max+c_min)/2)
+        delta = c_max - c_min
+        light = (c_max + c_min) / 2
         if delta == 0.0:
             hue = 0
             sat = 0
         else:
             if light < 0.5:
-                sat = (c_max-c_min)/(c_max+c_min)
+                sat = (c_max - c_min) / (c_max + c_min)
             else:
-                sat = (c_max-c_min)/(2.0-c_max-c_min)
+                sat = (c_max - c_min) / (2.0 - c_max - c_min)
             if c_max == r:
-                hue = (g-b)/(c_max-c_min)
+                hue = (g - b) / (c_max - c_min)
             elif c_max == g:
-                hue = 2.0 + (b-r)/(c_max-c_min)
+                hue = 2.0 + (b - r) / (c_max - c_min)
             else:
-                hue = 4.0 + (r-g)/(c_max-c_min)
+                hue = 4.0 + (r - g) / (c_max - c_min)
             hue *= 60
             if hue < 0:
                 hue += 360
         hue = map_range(hue, 0, 360, 0, 65535)
-        sat = map_range(sat*100, 0, 100, 0, 254)
-        light = map_range(light*100, 0, 100, 0, 254)
+        sat = map_range(sat * 100, 0, 100, 0, 254)
+        light = map_range(light * 100, 0, 100, 0, 254)
         return round(hue), round(sat, 3), round(light, 2)
 
     # Hue Core API
@@ -109,16 +111,18 @@ class Bridge:
         Returns the bridge's IP address.
         """
         try:
-            resp = self._wifi.get('https://discovery.meethue.com')
+            resp = self._wifi.get("https://discovery.meethue.com")
             json_data = resp.json()
-            bridge_ip = json_data[0]['internalipaddress']
+            bridge_ip = json_data[0]["internalipaddress"]
             resp.close()
         except:
-            raise TypeError('Ensure the Philips Bridge and CircuitPython device\
-                             are both on the same WiFi network.')
+            raise TypeError(
+                "Ensure the Philips Bridge and CircuitPython device\
+                             are both on the same WiFi network."
+            )
         self._ip = bridge_ip
         # set up hue bridge address path
-        self._bridge_url = 'http://{}/api'.format(self._ip)
+        self._bridge_url = "http://{}/api".format(self._ip)
         return self._ip
 
     def register_username(self):
@@ -126,17 +130,17 @@ class Bridge:
         Provides a 30 second delay to press the link button on the bridge.
         Returns username or None.
         """
-        self._bridge_url = 'http://{}/api'.format(self._ip)
-        data = {"devicetype":"CircuitPython#pyportal{0}".format(randint(0, 100))}
+        self._bridge_url = "http://{}/api".format(self._ip)
+        data = {"devicetype": "CircuitPython#pyportal{0}".format(randint(0, 100))}
         resp = self._wifi.post(self._bridge_url, json=data)
         connection_attempts = 1
         username = None
         while username is None and connection_attempts > 0:
             resp = self._wifi.post(self._bridge_url, json=data)
             json = resp.json()[0]
-            if json.get('success'):
-                username = str(json['success']['username'])
-                self._username_url = self._bridge_url+'/'+ username
+            if json.get("success"):
+                username = str(json["success"]["username"])
+                self._username_url = self._bridge_url + "/" + username
             connection_attempts -= 1
             time.sleep(1)
         resp.close()
@@ -147,7 +151,7 @@ class Bridge:
         """Gets the attributes and state of a given light.
         :param int light_id: Light identifier.
         """
-        resp = self._get('{0}/lights/{1}'.format(self._username_url, light_id))
+        resp = self._get("{0}/lights/{1}".format(self._username_url, light_id))
         return resp
 
     def set_light(self, light_id, **kwargs):
@@ -160,7 +164,9 @@ class Bridge:
         (more settings at:
         https://developers.meethue.com/develop/hue-api/lights-api/#set-light-state )
         """
-        resp = self._put('{0}/lights/{1}/state'.format(self._username_url, light_id), kwargs)
+        resp = self._put(
+            "{0}/lights/{1}/state".format(self._username_url, light_id), kwargs
+        )
         return resp
 
     def toggle_light(self, light_id):
@@ -168,7 +174,7 @@ class Bridge:
         :param int light_id: Light identifier.
         """
         light_state = self.get_light(light_id)
-        light_state = not light_state['state']['on']
+        light_state = not light_state["state"]["on"]
         resp = self.set_light(light_id, on=light_state)
         return resp
 
@@ -176,13 +182,13 @@ class Bridge:
         """Gets the attributes and state of a provided light.
         :param int light_id: Light identifier.
         """
-        resp = self._get('{0}/lights/{1}'.format(self._username_url, light_id))
+        resp = self._get("{0}/lights/{1}".format(self._username_url, light_id))
         return resp
 
     def get_lights(self):
         """Returns all the light resources available for a bridge.
         """
-        resp = self._get(self._username_url+'/lights')
+        resp = self._get(self._username_url + "/lights")
         return resp
 
     # Groups API
@@ -191,11 +197,8 @@ class Bridge:
         :param list lights: List of light identifiers.
         :param str group_id: Optional group name.
         """
-        data = {'lights':lights,
-                'name':group_id,
-                'type':group_id
-               }
-        resp = self._post(self._username_url+'/groups', data)
+        data = {"lights": lights, "name": group_id, "type": group_id}
+        resp = self._post(self._username_url + "/groups", data)
         return resp
 
     def set_group(self, group_id, **kwargs):
@@ -209,13 +212,15 @@ class Bridge:
         (more settings at
         https://developers.meethue.com/develop/hue-api/lights-api/#set-light-state )
         """
-        resp = self._put('{0}/groups/{1}/action'.format(self._username_url, group_id), kwargs)
+        resp = self._put(
+            "{0}/groups/{1}/action".format(self._username_url, group_id), kwargs
+        )
         return resp
 
     def get_groups(self):
         """Returns all the light groups available for a bridge.
         """
-        resp = self._get(self._username_url+'/groups')
+        resp = self._get(self._username_url + "/groups")
         return resp
 
     # Scene API
@@ -229,7 +234,7 @@ class Bridge:
     def get_scenes(self):
         """Returns a list of all scenes currently stored in the bridge.
         """
-        resp = self._get(self._username_url+'/scenes')
+        resp = self._get(self._username_url + "/scenes")
         return resp
 
     # HTTP Helpers for the Hue API
@@ -238,10 +243,7 @@ class Bridge:
         :param str path: Formatted Hue API URL
         :param json data: JSON data to POST to the Hue API.
         """
-        resp = self._wifi.post(
-            path,
-            json=data
-        )
+        resp = self._wifi.post(path, json=data)
         resp_json = resp.json()
         resp.close()
         return resp_json
@@ -251,10 +253,7 @@ class Bridge:
         :param str path: Formatted Hue API URL
         :param json data: JSON data to PUT to the Hue API.
         """
-        resp = self._wifi.put(
-            path,
-            json=data
-        )
+        resp = self._wifi.put(path, json=data)
         resp_json = resp.json()
         resp.close()
         return resp_json
@@ -264,10 +263,7 @@ class Bridge:
         :param str path: Formatted Hue API URL
         :param json data: JSON data to GET from the Hue API.
         """
-        resp = self._wifi.get(
-            path,
-            json=data
-        )
+        resp = self._wifi.get(path, json=data)
         resp_json = resp.json()
         resp.close()
         return resp_json
