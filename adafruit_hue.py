@@ -119,7 +119,7 @@ class Bridge:
             raise TypeError(
                 "Ensure the Philips Bridge and CircuitPython device\
                              are both on the same WiFi network."
-            )
+            ) from TypeError
         self._ip = bridge_ip
         # set up hue bridge address path
         self._bridge_url = "http://{}/api".format(self._ip)
