@@ -9,7 +9,7 @@ Introduction
     :target: https://adafru.it/discord
     :alt: Discord
 
-.. image:: https://github.com/adafruit/Adafruit_CircuitPython_Hue/workflows/Build%CI/badge.svg
+.. image:: https://github.com/adafruit/Adafruit_CircuitPython_Hue/workflows/Build%20CI/badge.svg
     :target: https://github.com/adafruit/Adafruit_CircuitPython_Hue/actions/
     :alt: Build Status
 
