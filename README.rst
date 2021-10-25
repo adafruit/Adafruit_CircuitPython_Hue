@@ -99,6 +99,11 @@ Set a group of lights to a predefined color
 
         my_bridge.set_group(1, color)
 
+Documentation
+=============
+
+API documentation for this library can be found on `Read the Docs <https://circuitpython.readthedocs.io/projects/hue/en/latest/>`_.
+
 Contributing
 ============
 
