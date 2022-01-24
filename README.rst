@@ -2,7 +2,7 @@ Introduction
 ============
 
 .. image:: https://readthedocs.org/projects/adafruit-circuitpython-hue/badge/?version=latest
-    :target: https://circuitpython.readthedocs.io/projects/hue/en/latest/
+    :target: https://docs.circuitpython.org/projects/hue/en/latest/
     :alt: Documentation Status
 
 .. image:: https://img.shields.io/discord/327254708534116352.svg
@@ -102,7 +102,7 @@ Set a group of lights to a predefined color
 Documentation
 =============
 
-API documentation for this library can be found on `Read the Docs <https://circuitpython.readthedocs.io/projects/hue/en/latest/>`_.
+API documentation for this library can be found on `Read the Docs <https://docs.circuitpython.org/projects/hue/en/latest/>`_.
 
 Contributing
 ============
