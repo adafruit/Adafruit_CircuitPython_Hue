@@ -98,7 +98,7 @@ class Bridge:
             json_data = resp.json()
             bridge_ip = json_data[0]["internalipaddress"]
             resp.close()
-        except Exception as err:
+        except IndexError as err:
             raise TypeError(
                 "Ensure the Philips Bridge and CircuitPython device\
                              are both on the same WiFi network."
