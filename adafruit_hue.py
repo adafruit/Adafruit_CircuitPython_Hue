@@ -29,7 +29,7 @@ import time
 from random import randint
 from simpleio import map_range
 
-__version__ = "0.0.0-auto.0"
+__version__ = "0.0.0+auto.0"
 __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_Hue.git"
 
 
