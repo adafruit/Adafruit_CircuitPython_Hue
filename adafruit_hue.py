@@ -30,7 +30,8 @@ from random import randint
 from simpleio import map_range
 
 try:
-    from typing import Optional, List, Union, Any
+    from typing import Optional, List, Union, Sequence, Any
+    from circuitpython_typing.http import HTTPProtocol
 except ImportError:
     pass
 
@@ -45,7 +46,7 @@ class Bridge:
 
     def __init__(
         self,
-        wifi_manager: Any,
+        wifi_manager: HTTPProtocol,
         bridge_ip: Optional[str] = None,
         username: Optional[str] = None,
     ) -> None:
@@ -65,7 +66,7 @@ class Bridge:
             self._username_url = self._bridge_url + "/" + self._username
 
     @staticmethod
-    def rgb_to_hsb(rgb: tuple) -> tuple:
+    def rgb_to_hsb(rgb: Sequence[int]) -> Sequence[int]:
         """Returns RGB values as a HSL tuple.
         :param list rgb: RGB Values
         """
@@ -142,7 +143,7 @@ class Bridge:
     # Lights API
     def show_light_info(self, light_id: Union[int, str]) -> str:
         """Gets the attributes and state of a given light.
-        :param int light_id: Light identifier.
+        :param int|str light_id: Light identifier.
         """
         resp = self._get(f"{self._username_url}/lights/{light_id}")
         return resp
@@ -150,6 +151,7 @@ class Bridge:
     def set_light(self, light_id: Union[int, str], **kwargs) -> str:
         """Allows the user to turn the light on and off, modify the hue and effects.
         You can pass the following as valid kwargs into this method:
+        :param int|str light_id: Light identifier
         :param bool on: On/Off state of the light
         :param int bri: Brightness value of the light, 0-100% (1 to 254)
         :param int hue: Hue value to set the light, in degrees (0 to 360) (0 to 65535)
@@ -162,7 +164,7 @@ class Bridge:
 
     def toggle_light(self, light_id: Union[int, str]) -> str:
         """Gets and toggles the current state of a specified light.
-        :param int light_id: Light identifier.
+        :param int|str light_id: Light identifier.
         """
         light_state = self.get_light(light_id)
         light_state = not light_state["state"]["on"]
@@ -171,20 +173,18 @@ class Bridge:
 
     def get_light(self, light_id: Union[int, str]) -> str:
         """Gets the attributes and state of a provided light.
-        :param int light_id: Light identifier.
+        :param int|str light_id: Light identifier.
         """
         resp = self._get(f"{self._username_url}/lights/{light_id}")
         return resp
 
-    def get_lights(self) -> str:
+    def get_lights(self) -> Any:
         """Returns all the light resources available for a bridge."""
         resp = self._get(self._username_url + "/lights")
         return resp
 
     # Groups API
-    def create_group(
-        self, lights: List[Union[int, str]], group_id: Optional[str]
-    ) -> str:
+    def create_group(self, lights: List[Union[int, str]], group_id: str) -> Any:
         """Creates a new group containing the lights specified and optional name.
         :param list lights: List of light identifiers.
         :param str group_id: Optional group name.
@@ -193,9 +193,9 @@ class Bridge:
         resp = self._post(self._username_url + "/groups", data)
         return resp
 
-    def set_group(self, group_id: Union[int, str], **kwargs) -> str:
+    def set_group(self, group_id: Union[int, str], **kwargs) -> Any:
         """Allows the user to turn the light on and off, modify the hue and effects.
-        :param int group_id: Group identifier.
+        :param int|str group_id: Group identifier.
         You can pass the following as (optional) valid kwargs into this method:
         :param bool on: On/Off state of the light
         :param int bri: Brightness value of the light (1 to 254)
@@ -207,26 +207,27 @@ class Bridge:
         resp = self._put(f"{self._username_url}/groups/{group_id}/action", kwargs)
         return resp
 
-    def get_groups(self) -> str:
+    def get_groups(self) -> Any:
         """Returns all the light groups available for a bridge."""
         resp = self._get(self._username_url + "/groups")
         return resp
 
     # Scene API
-    def set_scene(self, group_id: Union[int, str], scene_id: str):
+    def set_scene(self, group_id: Union[int, str], scene_id: str) -> None:
         """Sets a group scene.
+        :param int|str group_id: the group identifier
         :param str scene: The scene identifier
         """
         # To recall an existing scene, use the Groups API.
         self.set_group(group_id, scene=scene_id)
 
-    def get_scenes(self) -> str:
+    def get_scenes(self) -> Any:
         """Returns a list of all scenes currently stored in the bridge."""
         resp = self._get(self._username_url + "/scenes")
         return resp
 
     # HTTP Helpers for the Hue API
-    def _post(self, path: str, data: str) -> str:
+    def _post(self, path: str, data: str) -> Any:
         """POST data
         :param str path: Formatted Hue API URL
         :param json data: JSON data to POST to the Hue API.
@@ -236,7 +237,7 @@ class Bridge:
         resp.close()
         return resp_json
 
-    def _put(self, path: str, data: str):
+    def _put(self, path: str, data: str) -> Any:
         """PUT data
         :param str path: Formatted Hue API URL
         :param json data: JSON data to PUT to the Hue API.
@@ -246,7 +247,7 @@ class Bridge:
         resp.close()
         return resp_json
 
-    def _get(self, path: str, data: Optional[str] = None):
+    def _get(self, path: str, data: Optional[str] = None) -> Any:
         """GET data
         :param str path: Formatted Hue API URL
         :param json data: JSON data to GET from the Hue API.
