@@ -52,13 +52,14 @@ class Bridge:
     ) -> None:
         """
         Creates an instance of the Philips Hue Bridge Interface.
-        :param wifi_manager wifi_manager: WiFiManager from ESPSPI_WiFiManager/ESPAT_WiFiManager
+        :param wifi_manager wifi_manager: WiFiManager or Session
         """
-        wifi_type = str(type(wifi_manager))
-        if "ESPSPI_WiFiManager" in wifi_type or "ESPAT_WiFiManager" in wifi_type:
-            self._wifi = wifi_manager
-        else:
-            raise TypeError("This library requires a WiFiManager object.")
+        for attr in ("get", "post", "put"):
+            if not hasattr(wifi_manager, attr):
+                error = "This library requires a WiFiManager or Session object with a "
+                error += f"`{attr}` method, not {type(wifi_manager)}"
+                raise TypeError(error)
+        self._wifi = wifi_manager
         self._ip = bridge_ip
         self._username = username
         if bridge_ip and username is not None:
