@@ -58,12 +58,12 @@ To install in a virtual environment in your current project:
 Usage Example
 =============
 
-Load bridge username and IP Address from secrets.py file:
+Load bridge username and IP Address from settings.toml file:
 
 .. code-block:: python
 
-    username = secrets['hue_username']
-    bridge_ip = secrets['bridge_ip']
+    username = os.getenv("hue_username")
+    bridge_ip = os.getenv("bridge_ip")
     my_bridge = Bridge(wifi, bridge_ip, username)
 
 Enumerate all lights on the bridge
