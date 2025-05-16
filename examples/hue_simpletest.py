@@ -3,12 +3,13 @@
 
 import time
 from os import getenv
+
 import board
 import busio
-from digitalio import DigitalInOut
+import neopixel
 from adafruit_esp32spi import adafruit_esp32spi
 from adafruit_esp32spi.adafruit_esp32spi_wifimanager import WiFiManager
-import neopixel
+from digitalio import DigitalInOut
 
 # Import Philips Hue Bridge
 from adafruit_hue import Bridge
@@ -36,11 +37,9 @@ if username is None or bridge_ip is None:
     ip = my_bridge.discover_bridge()
     username = my_bridge.register_username()
     raise KeyError(
-        'Please add these values to your settings.toml: \
-                            \n\t"bridge_ip":"{0}", \
-                            \n\t"hue_username":"{1}"'.format(
-            ip, username
-        )
+        f'Please add these values to your settings.toml: \
+                            \n\t"bridge_ip":"{ip}", \
+                            \n\t"hue_username":"{username}"'
     )
 
 my_bridge = Bridge(wifi, bridge_ip, username)

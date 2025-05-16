@@ -25,12 +25,15 @@ Implementation Notes
 * SimpleIO library:
     https://github.com/adafruit/Adafruit_CircuitPython_SimpleIO
 """
+
 import time
 from random import randint
+
 from simpleio import map_range
 
 try:
-    from typing import Optional, List, Union, Sequence, Any
+    from typing import Any, List, Optional, Sequence, Union
+
     from circuitpython_typing.http import HTTPProtocol
 except ImportError:
     pass
